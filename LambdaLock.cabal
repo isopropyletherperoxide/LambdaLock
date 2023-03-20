@@ -1,0 +1,73 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           LambdaLock
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/isopropyletherperoxide/LambdaLock>
+homepage:       https://github.com/isopropyletherperoxide/LambdaLock#readme
+bug-reports:    https://github.com/isopropyletherperoxide/LambdaLock/issues
+author:         Aryl Halide
+maintainer:     endless.sine@gmail.com
+copyright:      2023 Aryl Halide
+license:        GPL3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/isopropyletherperoxide/LambdaLock
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_LambdaLock
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , directory >=1.3
+    , filepath
+    , optparse-applicative >=0.17
+    , text
+  default-language: Haskell2010
+
+executable LambdaLock-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_LambdaLock
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      LambdaLock
+    , base >=4.7 && <5
+    , directory >=1.3
+    , filepath
+    , optparse-applicative >=0.17
+    , text
+  default-language: Haskell2010
+
+test-suite passwords-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_LambdaLock
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      LambdaLock
+    , base >=4.7 && <5
+    , directory >=1.3
+    , filepath
+    , optparse-applicative >=0.17
+    , text
+  default-language: Haskell2010
