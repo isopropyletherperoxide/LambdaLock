@@ -83,7 +83,7 @@ passwordMg (Options (Insert username path)) = do
     else do
       setCurrentDirectory path
       writePass username
--- TODO: This
+-- 
 passwordMg (Options (Init key path)) = do
   if path == "HOME_FOLDER_PLACEHOLDER"
     then do
