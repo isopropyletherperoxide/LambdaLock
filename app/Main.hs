@@ -17,7 +17,7 @@ listP :: Parser Commands
 listP = List <$> strArgument (help "Path to the .password-store directory" <> metavar "Store Directory" <> value "HOME_FOLDER_PLACEHOLDER")
 
 addP :: Parser Commands
-addP = Insert <$> strArgument (help "bingle" <> metavar "Username") <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
+addP = Insert <$> strArgument (help "Username to make an entry for" <> metavar "Username") <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
 
 commandP :: Parser Options
 commandP = Options <$> subcommandP
@@ -25,8 +25,8 @@ commandP = Options <$> subcommandP
 subcommandP :: Parser Commands
 subcommandP =
   subparser
-    ( command "list" (info listP (progDesc "list"))
-        <> command "insert" (info addP (progDesc "insert"))
+    ( command "list" (info listP (progDesc "list the current entries"))
+        <> command "insert" (info addP (progDesc "insert a new entry into the password store"))
     )
 
 main :: IO ()
@@ -37,8 +37,7 @@ main = do
       info
         (commandP <**> helper)
         ( fullDesc
-            <> progDesc "Print a greeting for TARGET"
-            <> header "hello - a test for optparse-applicative"
+            <> progDesc "LambdaLock"
         )
 
 {- The Real Main Function -}
