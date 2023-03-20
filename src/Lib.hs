@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Lib
-    ( filterPasswords, trimPasswords, prettyPrintFilename, prettyPrintFilename1, listPasswords, passwordStore, printPasswords
+    ( filterPasswords, trimPasswords, prettyPrintFilename, prettyPrintFilename1, listPasswords, passwordStore, printPasswords, stripEscapes
     ) where
 
 import Data.Text (pack, replace, unpack)
