@@ -7,10 +7,14 @@ module Lib
 import Data.Text (pack, replace, unpack)
 import Data.List (isPrefixOf)
 import System.Directory
+import Data.Char (isSpace)
 
 -- | Removes all the hidden files from the password folder
 filterPasswords :: [FilePath] -> [FilePath]
 filterPasswords = filter (not . isPrefixOf ".")
+
+stripEscapes :: [Char] -> [Char]
+stripEscapes = reverse . dropWhile isSpace . reverse
 
 -- | Trims the filetype from the password 
 trimPasswords :: [FilePath] -> [FilePath]
