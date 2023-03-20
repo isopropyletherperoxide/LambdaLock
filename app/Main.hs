@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 
 module Main (main) where
 
@@ -6,14 +7,13 @@ import Lib
 import Options.Applicative
 import System.Directory
 import System.Process
-import Data.Char (isSpace)
 
 
 {- Parsing Arguments -}
 
 data Commands = List {listarg :: String} | Insert {addarg :: String, dir :: FilePath} | Init {uid :: String, path :: String} 
 
-data Options = Options {commandarg :: Commands}
+newtype Options = Options {commandarg :: Commands}
 
 listP :: Parser Commands
 listP = List <$> strArgument 
@@ -70,7 +70,7 @@ passwordMg (Options (Insert d path)) = do
     else do
       setCurrentDirectory path
       writePass d 
--- 
+-- TODO: This 
 passwordMg (Options (Init key path)) = do
         if path == "HOME_FOLDER_PLACEHOLDER"
            then do 
@@ -91,6 +91,4 @@ writePass filename = do
       callCommand $ "gpg -r " ++ userid ++ " --encrypt " ++ filename 
       removeFile filename
 
-stripEscapes :: [Char] -> [Char]
-stripEscapes = reverse . dropWhile isSpace . reverse
 
