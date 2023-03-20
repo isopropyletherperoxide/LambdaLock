@@ -7,6 +7,9 @@ import Lib
 import Options.Applicative
 import System.Directory
 import System.Process
+import GHC.IO.Handle.Internals (flushBuffer)
+import GHC.IO.Handle (hFlush)
+import GHC.IO.StdHandles (stdout)
 
 {- Parsing Arguments -}
 data Commands
@@ -14,8 +17,10 @@ data Commands
   | Insert {addarg :: String, dir :: FilePath}
   | Init {uid :: String, path :: String}
   | Get {uid :: String, path :: String}
+  | Del {uid :: String, path :: String }
 
 newtype Options = Options {commandarg :: Commands}
+
 
 listP :: Parser Commands
 listP =
@@ -44,6 +49,15 @@ initP =
       (help "Username to init the store with" <> metavar "Username")
     <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
 
+
+delP :: Parser Commands
+delP =
+  Del
+    <$> strArgument
+      (help "Username get the entry of" <> metavar "Entry")
+    <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
+
+
 commandP :: Parser Options
 commandP = Options <$> subcommandP
 
@@ -54,6 +68,7 @@ subcommandP =
         <> command "insert" (info addP (progDesc "insert a new entry into the password store"))
         <> command "init" (info initP (progDesc "initialize a new store"))
         <> command "get" (info getP (progDesc "get an entry"))
+        <> command "rm" (info delP (progDesc "delete an entry"))
     )
 
 main :: IO ()
@@ -105,13 +120,24 @@ passwordMg (Options (Get key path)) = do
     else do
       setCurrentDirectory path
       getPass key
+-- 
+passwordMg (Options (Del key path)) = do 
+  if path == "HOME_FOLDER_PLACEHOLDER"
+    then do
+      homedir <- getHomeDirectory
+      setCurrentDirectory (homedir ++ passwordStore)
+      removeFile $ key ++ ".gpg"
+    else do
+      setCurrentDirectory path
+      removeFile $ key ++ ".gpg"
+
 
 writePass :: FilePath -> IO ()
 writePass filename = do
   content <- readFile ".gpg-id"
   let userid = stripEscapes content
-  -- print userid
   putStr "Enter Password: "
+  hFlush stdout
   password <- getLine
   writeFile filename password
   callCommand $ "gpg -r " ++ userid ++ " --encrypt " ++ filename
