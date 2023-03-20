@@ -1,0 +1,63 @@
+name:                LambdaLock
+version:             0.1.0.0
+github:              "isopropyletherperoxide/LambdaLock"
+license:             GPL3
+author:              "Aryl Halide"
+maintainer:          "endless.sine@gmail.com"
+copyright:           "2023 Aryl Halide"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/isopropyletherperoxide/LambdaLock>
+
+dependencies:
+- base >= 4.7 && < 5
+- optparse-applicative >= 0.17
+- directory >= 1.3 
+- text
+- filepath
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  LambdaLock-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - LambdaLock
+
+tests:
+  passwords-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - LambdaLock
