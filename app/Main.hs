@@ -9,7 +9,6 @@ import System.Directory
 import System.Process
 
 {- Parsing Arguments -}
-
 data Commands
   = List {listarg :: String}
   | Insert {addarg :: String, dir :: FilePath}
@@ -40,7 +39,7 @@ getP =
 
 initP :: Parser Commands
 initP =
-  Insert
+  Init
     <$> strArgument
       (help "Username to init the store with" <> metavar "Username")
     <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
@@ -88,9 +87,16 @@ passwordMg (Options (Insert username path)) = do
 passwordMg (Options (Init key path)) = do
   if path == "HOME_FOLDER_PLACEHOLDER"
     then do
-      print key
+      homedir <- getHomeDirectory
+      setCurrentDirectory homedir 
+      createDirectory ".password-store"
+      setCurrentDirectory (homedir ++ passwordStore)
+      writeFile ".gpg-id" key
     else do
-      print path
+      setCurrentDirectory path 
+      createDirectory ".password-store"
+      setCurrentDirectory (path ++ passwordStore)
+      writeFile ".gpg-id" key
 --
 passwordMg (Options (Get key path)) = do
   if path == "HOME_FOLDER_PLACEHOLDER"
