@@ -25,6 +25,7 @@ dependencies:
 - directory >= 1.3 
 - text
 - filepath
+- process
 
 ghc-options:
 - -Wall
