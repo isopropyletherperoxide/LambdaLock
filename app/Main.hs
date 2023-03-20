@@ -94,8 +94,6 @@ passwordMg (Options (Init key path)) = do
       writeFile ".gpg-id" key
     else do
       setCurrentDirectory path 
-      createDirectory ".password-store"
-      setCurrentDirectory (path ++ passwordStore)
       writeFile ".gpg-id" key
 --
 passwordMg (Options (Get key path)) = do
