@@ -54,22 +54,22 @@ main = do
 
 {- The Real Main Function -}
 passwordMg :: Options -> IO ()
-passwordMg (Options (List d)) = do
-  if d == "HOME_FOLDER_PLACEHOLDER"
+passwordMg (Options (List dir)) = do
+  if dir == "HOME_FOLDER_PLACEHOLDER"
     then do
-      a <- getHomeDirectory
-      printPasswords (a ++ passwordStore)
-    else printPasswords d
+      homedir <- getHomeDirectory
+      printPasswords (homedir ++ passwordStore)
+    else printPasswords dir
 --
-passwordMg (Options (Insert d path)) = do
+passwordMg (Options (Insert username path)) = do
   if path == "HOME_FOLDER_PLACEHOLDER"
     then do
-      a <- getHomeDirectory
-      setCurrentDirectory (a ++ passwordStore)
-      writePass d 
+      homedir <- getHomeDirectory
+      setCurrentDirectory (homedir ++ passwordStore)
+      writePass username 
     else do
       setCurrentDirectory path
-      writePass d 
+      writePass username 
 -- TODO: This 
 passwordMg (Options (Init key path)) = do
         if path == "HOME_FOLDER_PLACEHOLDER"
@@ -84,7 +84,7 @@ writePass :: FilePath -> IO ()
 writePass filename = do
       content <- readFile ".gpg-id"
       let userid = stripEscapes content
-      print userid
+      -- print userid
       putStr "Enter Password: "
       password <- getLine
       writeFile filename password
