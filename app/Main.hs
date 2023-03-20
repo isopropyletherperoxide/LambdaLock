@@ -45,12 +45,9 @@ main :: IO ()
 main = do
   passwordMg =<< execParser opts
   where
-    opts =
-      info
+    opts = info
         (commandP <**> helper)
-        ( fullDesc
-            <> progDesc "LambdaLock"
-        )
+        ( fullDesc <> progDesc "LambdaLock")
 
 {- The Real Main Function -}
 passwordMg :: Options -> IO ()
