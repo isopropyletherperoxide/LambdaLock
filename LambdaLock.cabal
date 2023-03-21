@@ -5,14 +5,14 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           LambdaLock
-version:        0.1.0.0
+version:        0.2.0.0
 description:    Please see the README on GitHub at <https://github.com/isopropyletherperoxide/LambdaLock>
 homepage:       https://github.com/isopropyletherperoxide/LambdaLock#readme
 bug-reports:    https://github.com/isopropyletherperoxide/LambdaLock/issues
 author:         Aryl Halide
 maintainer:     endless.sine@gmail.com
 copyright:      2023 Aryl Halide
-license:        GPL3
+license:        GPL-3
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:

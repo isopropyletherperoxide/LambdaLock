@@ -1,7 +1,7 @@
 name:                LambdaLock
-version:             0.1.0.0
+version:             0.2.0.0
 github:              "isopropyletherperoxide/LambdaLock"
-license:             GPL3
+license:             GPL-3
 author:              "Aryl Halide"
 maintainer:          "endless.sine@gmail.com"
 copyright:           "2023 Aryl Halide"
