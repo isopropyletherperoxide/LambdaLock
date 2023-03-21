@@ -16,5 +16,3 @@ stack build
 stack install 
 ```
 
-# Notes
-You cannot have ``HOME_FOLDER_PLACEHOLDER`` as a ``--path`` argument because of default values, will be fixed later hopefully
