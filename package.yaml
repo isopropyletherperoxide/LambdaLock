@@ -42,7 +42,7 @@ library:
   source-dirs: src
 
 executables:
-  LambdaLock-exe:
+  lambdalock:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

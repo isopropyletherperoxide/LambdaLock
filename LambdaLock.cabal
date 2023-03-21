@@ -40,7 +40,7 @@ library
     , text
   default-language: Haskell2010
 
-executable LambdaLock-exe
+executable lambdalock
   main-is: Main.hs
   other-modules:
       Paths_LambdaLock
