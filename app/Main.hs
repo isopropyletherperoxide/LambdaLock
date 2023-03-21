@@ -7,7 +7,6 @@ import Lib
 import Options.Applicative
 import System.Directory
 import System.Process
-import GHC.IO.Handle.Internals (flushBuffer)
 import GHC.IO.Handle (hFlush)
 import GHC.IO.StdHandles (stdout)
 
@@ -21,41 +20,40 @@ data Commands
 
 newtype Options = Options {commandarg :: Commands}
 
-
 listP :: Parser Commands
 listP =
   List
     <$> strArgument
-      (help "Path to the .password-store directory" <> metavar "Store Directory" <> value "HOME_FOLDER_PLACEHOLDER")
+      (help "Path to the .password-store directory" <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER")
 
 addP :: Parser Commands
 addP =
   Insert
     <$> strArgument
-      (help "Username to make an entry for" <> metavar "Username")
-    <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
+      (help "Username to make an entry for" <> metavar "USERNAME")
+    <*> strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER")
 
 getP :: Parser Commands
 getP =
   Get
     <$> strArgument
-      (help "Username get the entry of" <> metavar "Entry")
-    <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
+      (help "Username get the entry of" <> metavar "ENTRY")
+    <*> strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER")
 
 initP :: Parser Commands
 initP =
   Init
     <$> strArgument
-      (help "Username to init the store with" <> metavar "Username")
-    <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
+      (help "Username to init the store with" <> metavar "USERNAME")
+    <*> strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER")
 
 
 delP :: Parser Commands
 delP =
   Del
     <$> strArgument
-      (help "Username get the entry of" <> metavar "Entry")
-    <*> strOption (long "path" <> short 'p' <> metavar "Storage Path" <> value "HOME_FOLDER_PLACEHOLDER")
+      (help "Username get the entry of" <> metavar "ENTRY")
+    <*> strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER")
 
 
 commandP :: Parser Options
@@ -67,8 +65,8 @@ subcommandP =
     ( command "list" (info listP (progDesc "list the current entries"))
         <> command "insert" (info addP (progDesc "insert a new entry into the password store"))
         <> command "init" (info initP (progDesc "initialize a new store"))
-        <> command "get" (info getP (progDesc "get an entry"))
-        <> command "rm" (info delP (progDesc "delete an entry"))
+        <> command "get" (info getP (progDesc "get an entry from the password store"))
+        <> command "rm" (info delP (progDesc "delete an entry from the password store"))
     )
 
 main :: IO ()
