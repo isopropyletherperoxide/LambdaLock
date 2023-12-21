@@ -8,15 +8,16 @@ import GHC.IO.StdHandles (stdout)
 import Lib
 import Options.Applicative
 import System.Directory
-import System.Process
+import System.Process ( callCommand )
+import Data.Text
 
 {- Parsing Arguments -}
 data Commands
   = List {listarg :: Maybe FilePath}
-  | Insert {addarg :: String, dir :: Maybe FilePath}
-  | Init {uid :: String, path :: Maybe FilePath}
-  | Get {uid :: String, path :: Maybe FilePath}
-  | Del {uid :: String, path :: Maybe FilePath}
+  | Insert {addarg :: Text, dir :: Maybe FilePath}
+  | Init {uid :: Text, path :: Maybe FilePath}
+  | Get {uid :: Text, path :: Maybe FilePath}
+  | Del {uid :: Text, path :: Maybe FilePath}
 
 newtype Options = Options {commandarg :: Commands}
 
@@ -33,28 +34,28 @@ addP =
   Insert
     <$> strArgument
       (help "Username to make an entry for" <> metavar "USERNAME")
-    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER"))
+    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH"))
 
 getP :: Parser Commands
 getP =
   Get
     <$> strArgument
       (help "Username get the entry of" <> metavar "ENTRY")
-    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER"))
+    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" ))
 
 initP :: Parser Commands
 initP =
   Init
     <$> strArgument
       (help "Username to init the store with" <> metavar "USERNAME")
-    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER"))
+    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH"))
 
 delP :: Parser Commands
 delP =
   Del
     <$> strArgument
       (help "Username get the entry of" <> metavar "ENTRY")
-    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" <> value "HOME_FOLDER_PLACEHOLDER"))
+    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH"))
 
 commandP :: Parser Options
 commandP = Options <$> subcommandP
@@ -92,10 +93,10 @@ passwordMg (Options (Insert username path)) = do
     Nothing -> do
       homedir <- getHomeDirectory
       setCurrentDirectory (homedir ++ passwordStore)
-      writePass username
+      writePass $ unpack username
     Just path' -> do
       setCurrentDirectory path'
-      writePass username
+      writePass $ unpack username
 --
 passwordMg (Options (Init key path)) = do
   case path of
@@ -104,30 +105,30 @@ passwordMg (Options (Init key path)) = do
       setCurrentDirectory homedir
       createDirectory ".password-store"
       setCurrentDirectory (homedir ++ passwordStore)
-      writeFile ".gpg-id" key
+      writeFile ".gpg-id" (unpack key)
     Just path' -> do
       setCurrentDirectory path'
-      writeFile ".gpg-id" key
+      writeFile ".gpg-id" (unpack key)
 --
 passwordMg (Options (Get key path)) = do
   case path of
     Nothing -> do
       homedir <- getHomeDirectory
       setCurrentDirectory (homedir ++ passwordStore)
-      getPass key
+      getPass $ unpack key
     Just path' -> do
       setCurrentDirectory path'
-      getPass key
+      getPass $ unpack key
 --
 passwordMg (Options (Del key path)) = do
   case path of
     Nothing -> do
       homedir <- getHomeDirectory
       setCurrentDirectory (homedir ++ passwordStore)
-      removeFile $ key ++ ".gpg"
+      removeFile $ unpack key ++ ".gpg"
     Just path' -> do
       setCurrentDirectory path'
-      removeFile $ key ++ ".gpg"
+      removeFile $ unpack key ++ ".gpg"
 
 writePass :: FilePath -> IO ()
 writePass filename = do
