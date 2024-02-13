@@ -3,21 +3,22 @@
 
 module Main (main) where
 
+import Data.Text
 import GHC.IO.Handle (hFlush)
 import GHC.IO.StdHandles (stdout)
 import Lib
 import Options.Applicative
 import System.Directory
-import System.Process ( callCommand )
-import Data.Text
+import System.Process (callCommand)
 
 {- Parsing Arguments -}
 data Commands
   = List {listarg :: Maybe FilePath}
   | Insert {addarg :: Text, dir :: Maybe FilePath}
-  | Init {uid :: Text, path :: Maybe FilePath}
-  | Get {uid :: Text, path :: Maybe FilePath}
-  | Del {uid :: Text, path :: Maybe FilePath}
+  | Init {uid :: Text, path :: Maybe FilePath }
+  | Get {uid1 :: Text, path1 :: Maybe FilePath}
+  | Del {uid2 :: Text, path2 :: Maybe FilePath}
+
 
 newtype Options = Options {commandarg :: Commands}
 
@@ -41,7 +42,7 @@ getP =
   Get
     <$> strArgument
       (help "Username get the entry of" <> metavar "ENTRY")
-    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH" ))
+    <*> optional (strOption (help "Path to the .password-store directory" <> long "path" <> short 'p' <> metavar "STORE_PATH"))
 
 initP :: Parser Commands
 initP =
